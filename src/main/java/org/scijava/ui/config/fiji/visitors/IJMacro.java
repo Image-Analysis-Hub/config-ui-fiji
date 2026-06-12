@@ -1,9 +1,13 @@
 package org.scijava.ui.config.fiji.visitors;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.scijava.ui.config.Configurator;
+import org.scijava.ui.config.Configurator.SelectableParameters;
+import org.scijava.ui.config.Parameters.Parameter;
 import org.scijava.ui.config.visitors.Maps;
 
 public class IJMacro
@@ -20,8 +24,13 @@ public class IJMacro
 		// Used to get value classes.
 		final Map< String, Object > defaultMap = Maps.toMap( config );
 
-		// Used to store the parsed values, with classes that the config object expects.
+		// Used to store the parsed values, with classes that the config object
+		// expects.
 		final Map< String, Object > targetMap = new HashMap<>();
+
+		// Used to keep track of what keys were set in the macro options, to
+		// know what SelectableParameter must be selected in the Selectables.
+		final HashSet< String > paramKeysInMacro = new HashSet<>();
 
 		// Parse macro option string.
 		final String[] tokens = macroOptions.split( " (?=(?:[^\\[\\]]*\\[[^\\[\\]]*\\])*[^\\[\\]]*$)" );
@@ -52,6 +61,8 @@ public class IJMacro
 				}
 				if ( defaultVal == null )
 					throw new IllegalArgumentException( "Unknown option key: " + key );
+
+				paramKeysInMacro.add( defaultKey );
 
 				if ( defaultVal instanceof String )
 					targetMap.put( defaultKey, val );
@@ -84,7 +95,42 @@ public class IJMacro
 				}
 				if ( defaultKey == null )
 					throw new IllegalArgumentException( "Unknown option key: " + key );
+
+				paramKeysInMacro.add( defaultKey );
+
 				targetMap.put( defaultKey, Boolean.TRUE );
+			}
+		}
+
+		// Loop over the SelectableParameters in the config.
+		final Set< SelectableParameters > activatedSelectables = new HashSet<>();
+		for ( final SelectableParameters selectable : config.getSelectables() )
+		{
+			// Loop over the keys of the SelectableParameters.
+			for ( final Parameter< ?, ? > param : selectable.getParameters() )
+			{
+				// If the macro options string contains a value for this key, we
+				// select it in the SelectableParameters.
+				if ( paramKeysInMacro.contains( param.getKey() ) )
+				{
+					// Have we already selected this SelectableParameters
+					// because of a previous parameter? If yes, not good.
+					if ( activatedSelectables.contains( selectable ) )
+						throw new IllegalArgumentException( "For the selection of " + selectable.getKey()
+								+ ", please set only one of these parameters: "
+								+ selectable.getParameters()
+										.stream()
+										.map( Parameter::getKey )
+										.reduce( ( a, b ) -> a.toLowerCase() + ", " + b.toLowerCase() )
+										.orElse( "" ) );
+
+					// Select it.
+					selectable.select( param );
+
+					// We also memorize that this selectable has been selected,
+					// so that it should not be selected again.
+					activatedSelectables.add( selectable );
+				}
 			}
 		}
 
