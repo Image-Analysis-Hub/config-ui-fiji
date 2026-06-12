@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>pom-scijava</artifactId>
+		<version>44.0.0</version>
+		<relativePath />
+	</parent>
+
+	<artifactId>config-ui-fiji</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>Config-UI-Fiji</name>
+	<description>A Java library to facilitate building user-interfaces for simple Fiji plugins.</description>
+	<url>https://github.com/tinevez/config-ui-fiji</url>
+	<inceptionYear>2026</inceptionYear>
+	<organization>
+		<name>Institut Pasteur</name>
+		<url>http://pasteur.fr/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>BSD-3-clause</name>
+			<url>https://opensource.org/license/bsd-3-clause/</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>tinevez</id>
+			<name>Jean-Yves Tinevez</name>
+			<url>https://imagej.net/people/tinevez</url>
+			<roles>
+				<role>lead</role>
+				<role>developer</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Tobias Pietzsch</name>
+			<url>https://imagej.net/people/tpietzsch</url>
+			<properties><id>ctrueden</id></properties>
+		</contributor>
+	</contributors>
+
+	<mailingLists>
+		<mailingList>
+			<name>Image.sc Forum</name>
+			<archive>https://forum.image.sc/</archive>
+		</mailingList>
+	</mailingLists>
+
+	<scm>
+		<connection>scm:git:https://github.com/tinevez/config-ui-fiji</connection>
+		<developerConnection>scm:git:git@github.com:tinevez/config-ui-fiji</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/tinevez/config-ui-fiji</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/tinevez/config-ui-fiji/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>GitHub Actions</system>
+		<url>https://github.com/tinevez/config-ui-fiji/actions</url>
+	</ciManagement>
+
+	<properties>
+		<package-name>org.scijava.ui.config</package-name>
+		<main-class>org.scijava.ui.config.Configurator</main-class>
+		<license.licenseName>bsd_3</license.licenseName>
+		<license.copyrightOwners>Institut Pasteur</license.copyrightOwners>
+
+		<!-- Use Java 21. -->
+		<scijava.jvm.version>21</scijava.jvm.version>
+		<scijava.jvm.build.version>[21,)</scijava.jvm.build.version>
+
+		<!-- NB: Deploy releases to the SciJava Maven repository. -->
+		<releaseProfiles>sign,deploy-to-scijava</releaseProfiles>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>config-ui</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>ij</artifactId>
+		</dependency>
+
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>__pycache__/*</exclude>
+					<exclude>.pixi/**</exclude>
+					<exclude>.mypy_cache</exclude>
+				</excludes>
+			</resource>
+		</resources>
+	</build>
+</project>
