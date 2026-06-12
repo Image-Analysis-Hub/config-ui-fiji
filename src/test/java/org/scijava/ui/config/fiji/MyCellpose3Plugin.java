@@ -21,8 +21,8 @@ public class MyCellpose3Plugin extends ConfigFijiPlugin< Cellpose3Config >
 	@Override
 	public void run( final Progress progress ) throws Exception
 	{
-		IJ.log( "Running Cellpose3 on image " + imp.getTitle() + " with config:" );
-		IJ.log( Strings.toString( config ) );
+		IJ.log( "Running Cellpose3 on image " + getImagePlus().getTitle() + " with config:" );
+		IJ.log( Strings.toString( getConfig() ) );
 		IJ.log( "Pretending to run Cellpose3..." );
 		final int max = 5;
 		int i = max;

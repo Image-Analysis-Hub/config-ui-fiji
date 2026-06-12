@@ -27,12 +27,12 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 	/**
 	 * The config instance, modified by the UI and recorded in the macro.
 	 */
-	protected C config;
+	private C config;
 
 	/**
 	 * The active image, on which the plugin is called.
 	 */
-	protected ImagePlus imp;
+	private ImagePlus imp;
 
 	@Override
 	public void run( final String arg )
@@ -73,6 +73,22 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 			frame.setTitle( title + " - " + imp.getTitle() );
 			frame.setVisible( true );
 		}
+	}
+
+	/**
+	 * Get the active image on which the plugin is called.
+	 * 
+	 * @return the active ImagePlus, or <code>null</code> if there is no active
+	 *         image.
+	 */
+	public ImagePlus getImagePlus()
+	{
+		return imp;
+	}
+
+	public C getConfig()
+	{
+		return config;
 	}
 
 	/**
