@@ -1,13 +1,14 @@
 package org.scijava.ui.config.fiji;
 
 import org.scijava.Cancelable;
+import org.scijava.command.Previewable;
 import org.scijava.ui.config.visitors.Strings;
 import org.scijava.ui.config.visitors.gui.FrameBuilder.ConfigFrame.Progress;
 
 import ij.IJ;
 import ij.ImagePlus;
 
-public class MyCellpose3Plugin extends ConfigFijiPlugin< Cellpose3Config > implements Cancelable
+public class MyCellpose3Plugin extends ConfigFijiPlugin< Cellpose3Config > implements Cancelable, Previewable
 {
 
 	private String cancelReason;
@@ -62,5 +63,37 @@ public class MyCellpose3Plugin extends ConfigFijiPlugin< Cellpose3Config > imple
 	public String getCancelReason()
 	{
 		return cancelReason;
+	}
+
+	@Override
+	public void preview()
+	{
+		cancelReason = null;
+		IJ.log( "Previewing Cellpose3 on current plane of " + getImagePlus().getTitle() );
+		final int max = 25;
+		int i = max;
+		while ( i-- > 0 && !isCanceled() )
+		{
+			try
+			{
+				Thread.sleep( 100 );
+			}
+			catch ( final InterruptedException e )
+			{
+				e.printStackTrace();
+			}
+		}
+		if ( isCanceled() )
+		{
+			IJ.log( "Preview canceled: " + getCancelReason() );
+			return;
+		}
+		IJ.log( "Preview done!" );
+	}
+
+	@Override
+	public void cancel()
+	{
+		cancel( "User canceled preview." );
 	}
 }
