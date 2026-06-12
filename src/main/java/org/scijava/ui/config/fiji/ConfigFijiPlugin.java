@@ -14,6 +14,7 @@ import org.scijava.ui.config.visitors.gui.FrameBuilder.ConfigFrame;
 import org.scijava.ui.config.visitors.gui.FrameBuilder.ConfigFrame.Progress;
 import org.scijava.ui.config.visitors.gui.FrameBuilder.UserTask;
 
+import ij.IJ;
 import ij.ImagePlus;
 import ij.Macro;
 import ij.WindowManager;
@@ -137,45 +138,43 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 		@Override
 		public void set( final double fraction )
 		{
-			// TODO Auto-generated method stub
+			IJ.showProgress( fraction );
 
 		}
 
 		@Override
 		public void set( final double fraction, final String text )
 		{
-			// TODO Auto-generated method stub
+			set( fraction );
+			message( text );
 
 		}
 
 		@Override
 		public void indeterminate( final boolean on, final String text )
 		{
-			// TODO Auto-generated method stub
-
+			if ( !on )
+				set( 0. );
+			message( text );
 		}
 
 		@Override
 		public void message( final String text )
 		{
-			// TODO Auto-generated method stub
-
+			IJ.showStatus( text );
 		}
 
 		@Override
 		public void clear()
 		{
-			// TODO Auto-generated method stub
-
+			set( 0. );
+			message( "" );
 		}
 
 		@Override
 		public boolean isCanceled()
 		{
-			// TODO Auto-generated method stub
 			return false;
 		}
-
 	}
-
 }
