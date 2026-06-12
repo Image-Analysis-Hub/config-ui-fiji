@@ -36,38 +36,59 @@ public class IJMacro
 				if ( val.startsWith( "[" ) && val.endsWith( "]" ) )
 					val = val.substring( 1, val.length() - 1 );
 
-				if ( defaultMap.containsKey( key ) )
+				// Find the corresponding key in the default map. The issue is
+				// that the macro recorder does lower-case everything, so we
+				// have to compare in a case-insentitive manner.
+				Object defaultVal = null;
+				String defaultKey = null;
+				for ( final String tmpKey : defaultMap.keySet() )
 				{
-					final Object defaultVal = defaultMap.get( key );
-					if ( defaultVal instanceof String )
-						targetMap.put( key, val );
-					else if ( defaultVal instanceof Boolean )
-						targetMap.put( key, Boolean.parseBoolean( val ) );
-					else if ( defaultVal instanceof Double || defaultVal instanceof Float )
-						targetMap.put( key, Double.parseDouble( val ) );
-					else if ( defaultVal instanceof Integer )
-						targetMap.put( key, Integer.parseInt( val ) );
-					else if ( defaultVal instanceof Enum )
-						targetMap.put( key, Enum.valueOf( ( Class< Enum > ) defaultVal.getClass(), val ) );
-					else
-						throw new IllegalArgumentException( "Unsupported parameter type for key: " + key );
+					if ( tmpKey.equalsIgnoreCase( key ) )
+					{
+						defaultKey = tmpKey;
+						defaultVal = defaultMap.get( tmpKey );
+						break;
+					}
 				}
-				else
-				{
+				if ( defaultVal == null )
 					throw new IllegalArgumentException( "Unknown option key: " + key );
-				}
+
+				if ( defaultVal instanceof String )
+					targetMap.put( defaultKey, val );
+				else if ( defaultVal instanceof Boolean )
+					targetMap.put( defaultKey, Boolean.parseBoolean( val ) );
+				else if ( defaultVal instanceof Double || defaultVal instanceof Float )
+					targetMap.put( defaultKey, Double.parseDouble( val ) );
+				else if ( defaultVal instanceof Integer )
+					targetMap.put( defaultKey, Integer.parseInt( val ) );
+				else if ( defaultVal instanceof Enum )
+					targetMap.put( defaultKey, Enum.valueOf( ( Class< Enum > ) defaultVal.getClass(), val ) );
+				else
+					throw new IllegalArgumentException( "Unsupported parameter type for key: " + key );
 			}
 			else
 			{
 				// Boolean flag: presence = true
+				// But we must again check case-insensitively against the
+				// default map, as the macro recorder lower-cases everything.
+
 				final String key = token;
-				if ( defaultMap.containsKey( key ) && defaultMap.get( key ) instanceof Boolean )
-					targetMap.put( key, Boolean.TRUE );
+				String defaultKey = null;
+				for ( final String tmpKey : defaultMap.keySet() )
+				{
+					if ( tmpKey.equalsIgnoreCase( key ) )
+					{
+						defaultKey = tmpKey;
+						break;
+					}
+				}
+				if ( defaultKey == null )
+					throw new IllegalArgumentException( "Unknown option key: " + key );
+				targetMap.put( defaultKey, Boolean.TRUE );
 			}
 		}
 
-		// Now we put all the parsed values in the config object from the target
-		// map.
+		// Now we put all the parsed values in the config object from the target map.
 		Maps.fromMap( targetMap, config );
 	}
 }
