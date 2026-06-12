@@ -1,13 +1,16 @@
 package org.scijava.ui.config.fiji;
 
+import org.scijava.Cancelable;
 import org.scijava.ui.config.visitors.Strings;
 import org.scijava.ui.config.visitors.gui.FrameBuilder.ConfigFrame.Progress;
 
 import ij.IJ;
 import ij.ImagePlus;
 
-public class MyCellpose3Plugin extends ConfigFijiPlugin< Cellpose3Config >
+public class MyCellpose3Plugin extends ConfigFijiPlugin< Cellpose3Config > implements Cancelable
 {
+
+	private String cancelReason;
 
 	@Override
 	public Cellpose3Config createConfig( final ImagePlus imp )
@@ -21,18 +24,43 @@ public class MyCellpose3Plugin extends ConfigFijiPlugin< Cellpose3Config >
 	@Override
 	public void run( final Progress progress ) throws Exception
 	{
+		cancelReason = null;
 		IJ.log( "Running Cellpose3 on image " + getImagePlus().getTitle() + " with config:" );
 		IJ.log( Strings.toString( getConfig() ) );
 		IJ.log( "Pretending to run Cellpose3..." );
-		final int max = 5;
+		final int max = 25;
 		int i = max;
-		while ( i-- > 0 )
+		while ( i-- > 0 && !isCanceled() )
 		{
 			Thread.sleep( 100 );
 			progress.set( ( max - i ) / ( double ) max, "Running Cellpose 3" );
 		}
 		progress.clear();
+
+		if ( isCanceled() )
+		{
+			IJ.log( "Canceled: " + getCancelReason() );
+			return;
+		}
 		super.run( progress );
 		IJ.log( "Done!" );
+	}
+
+	@Override
+	public boolean isCanceled()
+	{
+		return cancelReason != null;
+	}
+
+	@Override
+	public void cancel( final String reason )
+	{
+		this.cancelReason = reason;
+	}
+
+	@Override
+	public String getCancelReason()
+	{
+		return cancelReason;
 	}
 }
