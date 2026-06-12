@@ -14,13 +14,7 @@ public class Cellpose3Config extends Configurator
 
 	private final PathParam customModel;
 
-	private final SelectableParameters builtinOrCustom;
-
 	private final DoubleParam diameter;
-
-	private IntParam chan1;
-
-	private IntParam chan2;
 
 	private DoubleParam flowThreshold;
 
@@ -55,14 +49,14 @@ public class Cellpose3Config extends Configurator
 				.get();
 
 		// One or the other, but not both.
-		this.builtinOrCustom = addSelectableParameters()
+		addSelectableParameters()
 				.key( "BUILTIN_OR_CUSTOM" )
 				.add( builtinModel )
 				.add( customModel )
 				.get();
 
 		// Channels, two int params.
-		this.chan1 = addIntParameter()
+		addIntParameter()
 				.key( "CHAN1" )
 				.name( "Main channel" )
 				.help( "The main channel to segment. Select 0 to use a grayscale blend of all channels." )
@@ -70,7 +64,7 @@ public class Cellpose3Config extends Configurator
 				.min( 0 )
 				.max( nChannels )
 				.get();
-		this.chan2 = addIntParameter()
+		addIntParameter()
 				.key( "CHAN2" )
 				.name( "Optional channel" )
 				.help( "The second channel to segment. Select 0 to skip using a second channel." )
