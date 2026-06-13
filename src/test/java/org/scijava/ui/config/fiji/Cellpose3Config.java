@@ -131,21 +131,21 @@ public class Cellpose3Config extends Configurator
 		 * Export group.
 		 */
 
-		this.exportROIs = addFlag()
+		this.exportROIs = addBooleanParameter()
 				.key( "EXPORT_ROIS" )
 				.name( "Export ROIs" )
 				.help( "If set, ROIs will be computed from the labels output and added to the input image." )
 				.defaultValue( true )
 				.get();
 
-		this.exportLabels = addFlag()
+		this.exportLabels = addBooleanParameter()
 				.key( "EXPORT_LABELS" )
 				.name( "Export label image" )
 				.help( "If set, the label image will be shown." )
 				.defaultValue( false )
 				.get();
 
-		this.exportFlows = addFlag()
+		this.exportFlows = addBooleanParameter()
 				.key( "EXPORT_FLOWS" )
 				.name( "Export flows" )
 				.help( "If set, the Cellpose flows will be shown as a 3-channel image" )
