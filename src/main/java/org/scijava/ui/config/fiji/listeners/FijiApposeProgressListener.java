@@ -46,9 +46,8 @@ import javax.swing.JDialog;
 import javax.swing.JProgressBar;
 import javax.swing.WindowConstants;
 
-import org.apposed.appose.TaskEvent;
 import org.apposed.appose.Builder.ProgressConsumer;
-import org.scijava.ui.config.listeners.ApposeTaskListener.ProgressApposeListener;
+import org.apposed.appose.TaskEvent;
 import org.scijava.ui.config.visitors.gui.FrameBuilder.ConfigFrame.Progress;
 
 import ij.IJ;
@@ -68,18 +67,12 @@ public class FijiApposeProgressListener extends ProgressApposeListener
 
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool( 1 );
 
-	private String title;
+	private final String title;
 
 	public FijiApposeProgressListener( final Progress progress, final String title )
 	{
 		super( progress );
 		this.title = title;
-	}
-
-	@Override
-	public void error( final String msg )
-	{
-		IJ.error( title, msg );
 	}
 	
 	@Override
@@ -115,7 +108,7 @@ public class FijiApposeProgressListener extends ProgressApposeListener
 			else
 			{
 				// Actual error.
-				error( "ERROR: " + str );
+				IJ.error( title, str );
 			}
 		};
 	}
