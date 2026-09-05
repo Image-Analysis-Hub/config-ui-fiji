@@ -180,7 +180,7 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 	/**
 	 * When the plugin is run from a macro, report progress via the IJ toolbar.
 	 */
-	protected static class IJProgress implements Progress
+	public static class IJProgress implements Progress
 	{
 
 		@Override
