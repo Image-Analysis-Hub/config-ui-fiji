@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>config-ui-fiji</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.2</version>
 
 	<name>Config-UI-Fiji</name>
 	<description>A Java library to facilitate building user-interfaces for simple Fiji plugins.</description>
@@ -61,7 +61,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/tinevez/config-ui-fiji</connection>
 		<developerConnection>scm:git:git@github.com:tinevez/config-ui-fiji</developerConnection>
-		<tag>HEAD</tag>
+		<tag>config-ui-fiji-0.0.2</tag>
 		<url>https://github.com/tinevez/config-ui-fiji</url>
 	</scm>
 	<issueManagement>
