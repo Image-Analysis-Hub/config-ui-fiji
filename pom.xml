@@ -98,6 +98,12 @@
 			<groupId>net.imagej</groupId>
 			<artifactId>ij</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2-appose</artifactId>
+			<version>0.10.0-SNAPSHOT</version>
+		</dependency>
+
 
 		<!-- Test dependencies -->
 		<dependency>
