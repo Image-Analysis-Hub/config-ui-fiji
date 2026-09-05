@@ -1,8 +1,8 @@
 /*-
  * #%L
- * Running Cellpose 3 and 4 from Java with Appose, using ImgLib2 data structure.
+ * A Java library to facilitate building user-interfaces for simple Fiji plugins.
  * %%
- * Copyright (C) 2026 Appose developpers
+ * Copyright (C) 2026 Institut Pasteur
  * %%
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -14,7 +14,7 @@
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
  * 
- * 3. Neither the name of the My Company nor the names of its contributors
+ * 3. Neither the name of the Institut Pasteur nor the names of its contributors
  *    may be used to endorse or promote products derived from this software without
  *    specific prior written permission.
  * 
