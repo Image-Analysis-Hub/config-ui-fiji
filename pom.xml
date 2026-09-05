@@ -74,7 +74,7 @@
 	</ciManagement>
 
 	<properties>
-		<package-name>org.scijava.ui.config</package-name>
+		<package-name>org.scijava.ui.config.fiji</package-name>
 		<main-class>org.scijava.ui.config.Configurator</main-class>
 		<license.licenseName>bsd_3</license.licenseName>
 		<license.copyrightOwners>Institut Pasteur</license.copyrightOwners>
