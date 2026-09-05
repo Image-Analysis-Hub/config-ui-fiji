@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>config-ui-fiji</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 
 	<name>Config-UI-Fiji</name>
 	<description>A Java library to facilitate building user-interfaces for simple Fiji plugins.</description>
