@@ -79,32 +79,41 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 			// Macro / IJ.run() path — skip the UI entirely
 			// -> parse the options string and fill the config with the values
 			// ----------------------------------------------------------
-			IJMacro.optionsToConfig( macroOptions, config );
-			try
-			{
-				this.run( new IJProgress() );
-			}
-			catch ( final Exception e )
-			{
-				e.printStackTrace();
-			}
+			runViaMacro( macroOptions );
 		}
 		else
 		{
 			// ----------------------------------------------------------
 			// Interactive path — show the UI
 			// ----------------------------------------------------------
-			
-			// Load previously saved values.
-			Prefs.deserialize( config );
-			// Shows the UI and return.
-			final ConfigFrame frame = FrameBuilder.build( config, this, createConfig( imp ) );
-			if ( imp.getWindow() != null )
-				GuiUtils.positionWindow( frame, imp.getWindow() );
-			final String title = frame.getTitle();
-			frame.setTitle( title + " - " + imp.getTitle() );
-			frame.setVisible( true );
+			showUI();
 		}
+	}
+
+	protected void runViaMacro( final String macroOptions )
+	{
+		IJMacro.optionsToConfig( macroOptions, config );
+		try
+		{
+			run( new IJProgress() );
+		}
+		catch ( final Exception e )
+		{
+			e.printStackTrace();
+		}
+	}
+
+	protected void showUI()
+	{
+		// Load previously saved values.
+		Prefs.deserialize( config );
+		// Shows the UI and return.
+		final ConfigFrame frame = FrameBuilder.build( config, this, createConfig( imp ) );
+		if ( imp.getWindow() != null )
+			GuiUtils.positionWindow( frame, imp.getWindow() );
+		final String title = frame.getTitle();
+		frame.setTitle( title + " - " + imp.getTitle() );
+		frame.setVisible( true );
 	}
 
 	/**
