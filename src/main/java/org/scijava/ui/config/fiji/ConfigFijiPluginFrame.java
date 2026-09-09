@@ -46,7 +46,7 @@ public abstract class ConfigFijiPluginFrame< C extends Configurator > extends Co
 	private Supplier< ImagePlus > impSupplier;
 
 	@Override
-	protected void showUI()
+	protected ConfigFrame showUI()
 	{
 		Prefs.deserialize( getConfig() );
 		final ImagePlus imp = getImagePlus();
@@ -59,6 +59,7 @@ public abstract class ConfigFijiPluginFrame< C extends Configurator > extends Co
 			frame.setLocationRelativeTo( null );
 		frame.setTitle( frame.getTitle() );
 		frame.setVisible( true );
+		return frame;
 	}
 
 	@Override

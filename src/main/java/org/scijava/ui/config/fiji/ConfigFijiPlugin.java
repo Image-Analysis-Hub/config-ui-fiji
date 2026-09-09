@@ -103,7 +103,7 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 		}
 	}
 
-	protected void showUI()
+	protected ConfigFrame showUI()
 	{
 		// Load previously saved values.
 		Prefs.deserialize( config );
@@ -114,6 +114,7 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 		final String title = frame.getTitle();
 		frame.setTitle( title + " - " + imp.getTitle() );
 		frame.setVisible( true );
+		return frame;
 	}
 
 	/**
