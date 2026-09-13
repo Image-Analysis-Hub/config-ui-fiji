@@ -35,7 +35,6 @@ package org.scijava.ui.config.fiji;
 import org.scijava.Cancelable;
 import org.scijava.command.Previewable;
 import org.scijava.ui.config.visitors.Strings;
-import org.scijava.ui.config.visitors.gui.FrameBuilder.ConfigFrame.Progress;
 
 import ij.IJ;
 import ij.ImagePlus;
@@ -55,17 +54,24 @@ public class MyCellpose3Plugin extends ConfigFijiPlugin< Cellpose3Config > imple
 	}
 
 	@Override
-	public void run( final Progress progress ) throws Exception
+	public void run()
 	{
 		cancelReason = null;
-		IJ.log( "Running Cellpose3 on image " + getImagePlus().getTitle() + " with config:" );
-		IJ.log( Strings.toString( getConfig() ) );
+		IJ.log( "Running Cellpose3 on image " + imp.getTitle() + " with config:" );
+		IJ.log( Strings.toString( config ) );
 		IJ.log( "Pretending to run Cellpose3..." );
 		final int max = 25;
 		int i = max;
 		while ( i-- > 0 && !isCanceled() )
 		{
-			Thread.sleep( 100 );
+			try
+			{
+				Thread.sleep( 100 );
+			}
+			catch ( final InterruptedException e )
+			{
+				e.printStackTrace();
+			}
 			progress.set( ( max - i ) / ( double ) max, "Running Cellpose 3" );
 		}
 		progress.clear();
@@ -75,7 +81,7 @@ public class MyCellpose3Plugin extends ConfigFijiPlugin< Cellpose3Config > imple
 			IJ.log( "Canceled: " + getCancelReason() );
 			return;
 		}
-		super.run( progress );
+		super.run();
 		IJ.log( "Done!" );
 	}
 
@@ -101,7 +107,7 @@ public class MyCellpose3Plugin extends ConfigFijiPlugin< Cellpose3Config > imple
 	public void preview()
 	{
 		cancelReason = null;
-		IJ.log( "Previewing Cellpose3 on current plane of " + getImagePlus().getTitle() );
+		IJ.log( "Previewing Cellpose3 on current plane of " + imp.getTitle() );
 		final int max = 25;
 		int i = max;
 		while ( i-- > 0 && !isCanceled() )

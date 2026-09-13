@@ -43,8 +43,8 @@ import org.scijava.ui.config.utils.GuiUtils;
 import org.scijava.ui.config.visitors.Prefs;
 import org.scijava.ui.config.visitors.gui.FrameBuilder;
 import org.scijava.ui.config.visitors.gui.FrameBuilder.ConfigFrame;
-import org.scijava.ui.config.visitors.gui.FrameBuilder.ConfigFrame.Progress;
-import org.scijava.ui.config.visitors.gui.FrameBuilder.UserTask;
+import org.scijava.ui.config.visitors.gui.Progress;
+import org.scijava.ui.config.visitors.gui.ProgressAware;
 
 import ij.IJ;
 import ij.ImagePlus;
@@ -53,18 +53,26 @@ import ij.WindowManager;
 import ij.plugin.PlugIn;
 import ij.plugin.frame.Recorder;
 
-public abstract class ConfigFijiPlugin< C extends Configurator > implements PlugIn, UserTask
+public abstract class ConfigFijiPlugin< C extends Configurator > implements PlugIn, Runnable, ProgressAware
 {
 
 	/**
 	 * The config instance, modified by the UI and recorded in the macro.
 	 */
-	private C config;
+	protected C config;
 
 	/**
 	 * The active image, on which the plugin is called.
 	 */
-	private ImagePlus imp;
+	protected ImagePlus imp;
+
+	protected Progress progress;
+
+	@Override
+	public void setProgress( final Progress progress )
+	{
+		this.progress = progress;
+	}
 
 	@Override
 	public void run( final String arg )
@@ -95,7 +103,8 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 		IJMacro.optionsToConfig( macroOptions, config );
 		try
 		{
-			run( new IJProgress() );
+			progress = new IJProgress();
+			run();
 		}
 		catch ( final Exception e )
 		{
@@ -118,22 +127,6 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 	}
 
 	/**
-	 * Get the active image on which the plugin is called.
-	 * 
-	 * @return the active ImagePlus, or <code>null</code> if there is no active
-	 *         image.
-	 */
-	public ImagePlus getImagePlus()
-	{
-		return imp;
-	}
-
-	public C getConfig()
-	{
-		return config;
-	}
-
-	/**
 	 * Hook for subclasses to implement the actual plugin logic. The method
 	 * called when the user clicks "plays" in the UI or when the plugin is run
 	 * from a macro. The config object will have been updated with the values
@@ -145,7 +138,7 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 	 * 
 	 */
 	@Override
-	public void run( final Progress progress ) throws Exception
+	public void run()
 	{
 		recordMacro( config );
 	}
@@ -205,7 +198,6 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 		{
 			set( fraction );
 			message( text );
-
 		}
 
 		@Override
