@@ -98,7 +98,7 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 		}
 	}
 
-	protected void runViaMacro( final String macroOptions )
+	private void runViaMacro( final String macroOptions )
 	{
 		IJMacro.optionsToConfig( macroOptions, config );
 		try
@@ -112,7 +112,7 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 		}
 	}
 
-	protected ConfigFrame showUI()
+	private ConfigFrame showUI()
 	{
 		// Load previously saved values.
 		Prefs.deserialize( config );
@@ -133,8 +133,8 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 	 * from the UI or from the macro options string, respectively.
 	 * <p>
 	 * Note that to make the plugin macro-recordable, subclassers must call
-	 * <code>super.run(progress)</code> at the end of this method, which will
-	 * record the macro with the current config values.
+	 * <code>super.run()</code> at the end of this method, which will record the
+	 * macro with the current config values.
 	 * 
 	 */
 	@Override
