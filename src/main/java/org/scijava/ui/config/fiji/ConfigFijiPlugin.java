@@ -32,6 +32,11 @@
  */
 package org.scijava.ui.config.fiji;
 
+import static org.scijava.ui.config.fiji.PostProcessUtils.addROIs;
+import static org.scijava.ui.config.fiji.PostProcessUtils.clearOutsideRoi;
+import static org.scijava.ui.config.fiji.PostProcessUtils.transferCalibration;
+
+import java.awt.Color;
 import java.util.List;
 
 import org.scijava.ui.config.Configurator;
@@ -50,8 +55,10 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.Macro;
 import ij.WindowManager;
+import ij.gui.Roi;
 import ij.plugin.PlugIn;
 import ij.plugin.frame.Recorder;
+import ij.plugin.frame.RoiManager;
 
 public abstract class ConfigFijiPlugin< C extends Configurator > implements PlugIn, Runnable, ProgressAware
 {
@@ -151,6 +158,52 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 	public void run()
 	{
 		recordMacro( config );
+	}
+
+	/**
+	 * Utility method that can be called by subclasses to post-process the
+	 * output image, by transferring the calibration from the input image and
+	 * clearing pixels outside the ROI.
+	 *
+	 * @param input
+	 *            the input image, from which to transfer the calibration and
+	 *            ROI. Will not be modified.
+	 * @param toPostProcess
+	 *            the output image to post-process. Will be modified in place.
+	 * @param inputRoi
+	 */
+	protected static void postProcessOuput( final ImagePlus input, final ImagePlus toPostProcess )
+	{
+		Roi inputRoi = input.getRoi();
+		if ( inputRoi != null )
+			inputRoi = ( Roi ) inputRoi.clone();
+		transferCalibration( input, toPostProcess, inputRoi );
+		clearOutsideRoi( toPostProcess, inputRoi );
+	}
+
+	/**
+	 * Creates and and show a list of ROIs in the ROI manager, from a label
+	 * image. The ROIs are named with the given prefix, and their time-point is
+	 * shifted by the specified time origin. The input image is used to
+	 * determine whether the ROIs should be displayed on all channels or only on
+	 * the current channel.
+	 * <p>
+	 * ROIs are created only for 2D images.
+	 *
+	 * @param input
+	 *            the input image from which the label image was generated.
+	 * @param labels
+	 *            the label image to create ROIs from.
+	 * @param prefix
+	 *            the prefix to use for naming the ROIs.
+	 * @param tOrigin
+	 *            the time origin for the ROIs.
+	 */
+	protected static void toROIs( final ImagePlus input, final ImagePlus labels, final String prefix, final int tOrigin )
+	{
+		final boolean multipleChannels = input.getNChannels() > 1;
+		addROIs( labels, prefix, Color.YELLOW, tOrigin, multipleChannels );
+		RoiManager.getInstance2().runCommand( "Show All" );
 	}
 
 	private void recordMacro( final C config )
