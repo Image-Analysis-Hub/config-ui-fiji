@@ -6,18 +6,18 @@
  * %%
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of the Institut Pasteur nor the names of its contributors
  *    may be used to endorse or promote products derived from this software without
  *    specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -112,14 +112,24 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 		}
 	}
 
-	private ConfigFrame showUI()
+	protected ConfigFrame showUI()
 	{
 		// Load previously saved values.
 		Prefs.deserialize( config );
 		// Shows the UI and return.
 		final ConfigFrame frame = FrameBuilder.build( config, this, createConfig( imp ) );
 		if ( imp.getWindow() != null )
+		{
 			GuiUtils.positionWindow( frame, imp.getWindow() );
+			imp.getWindow().addWindowListener( new java.awt.event.WindowAdapter()
+			{
+				@Override
+				public void windowClosed( final java.awt.event.WindowEvent e )
+				{
+					frame.dispose();
+				}
+			} );
+		}
 		final String title = frame.getTitle();
 		frame.setTitle( title + " - " + imp.getTitle() );
 		frame.setVisible( true );
@@ -135,7 +145,7 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 	 * Note that to make the plugin macro-recordable, subclassers must call
 	 * <code>super.run()</code> at the end of this method, which will record the
 	 * macro with the current config values.
-	 * 
+	 *
 	 */
 	@Override
 	public void run()
@@ -172,7 +182,7 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 	/**
 	 * Creates a new instance of the configuration object, which will be used to
 	 * show the UI and to record the macro.
-	 * 
+	 *
 	 * @param imp
 	 *            the active ImagePlus, which can be used to initialize the
 	 *            config with image-specific values (e.g. pixel size, number of
