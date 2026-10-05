@@ -125,7 +125,7 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 		Prefs.deserialize( config );
 		// Shows the UI and return.
 		final ConfigFrame frame = FrameBuilder.build( config, this, createConfig( imp ) );
-		if ( imp.getWindow() != null )
+		if ( imp != null && imp.getWindow() != null )
 		{
 			GuiUtils.positionWindow( frame, imp.getWindow() );
 			imp.getWindow().addWindowListener( new java.awt.event.WindowAdapter()
@@ -137,8 +137,12 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 				}
 			} );
 		}
-		final String title = frame.getTitle();
-		frame.setTitle( title + " - " + imp.getTitle() );
+		else
+		{
+			frame.setLocationRelativeTo( null );
+		}
+		final String title = frame.getTitle() + ( imp == null ? "" : " - " + imp.getTitle() );
+		frame.setTitle( title );
 		frame.setVisible( true );
 		return frame;
 	}
