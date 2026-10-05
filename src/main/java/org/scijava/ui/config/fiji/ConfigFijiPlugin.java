@@ -175,7 +175,6 @@ public abstract class ConfigFijiPlugin< C extends Configurator > implements Plug
 	 *            ROI. Will not be modified.
 	 * @param toPostProcess
 	 *            the output image to post-process. Will be modified in place.
-	 * @param inputRoi
 	 */
 	protected static void postProcessOuput( final ImagePlus input, final ImagePlus toPostProcess )
 	{

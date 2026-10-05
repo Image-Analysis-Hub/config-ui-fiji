@@ -252,7 +252,6 @@ public class PostProcessUtils
 	 *            set it to <code>true</code> if the target image has multiple
 	 *            channels. Otherwise the ROIs will be displayed on all frames
 	 *            of the target image.
-	 * @return a list of ROIs corresponding to the labels in the input image.
 	 */
 	public static void addROIs( final ImagePlus labels, final String prefix, final Color color, final int tOrigin, final boolean multipleChannels )
 	{
